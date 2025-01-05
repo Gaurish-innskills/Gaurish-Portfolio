@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Stopwatch - Gaurish Metha</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="stopwatch.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <div class="nav-content">
+            <div class="logo">
+                <a href="../../index.html" class="cyber-text">&lt;Gaurish/&gt;</a>
+            </div>
+            <a href="../../index.html" class="cyber-button back-btn">
+                <i class="fas fa-arrow-left"></i> BACK TO HOME
+            </a>
+        </div>
+    </nav>
+
+    <main class="project-details">
+        <div class="project-header">
+            <h1 class="cyber-glitch">QUANTUM STOPWATCH</h1>
+            <div class="project-meta">
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">PyQt5</span>
+                <span class="tech-tag">GUI</span>
+            </div>
+        </div>
+
+        <div class="project-content">
+            <div class="project-description">
+                <h2 class="cyber-text">PROJECT OVERVIEW</h2>
+                <p>A modern, high-precision stopwatch application built with Python and PyQt5. Features include:</p>
+                <ul>
+                    <li>High-precision timing (10ms accuracy)</li>
+                    <li>Clean, modern user interface</li>
+                    <li>Start, stop, and reset functionality</li>
+                    <li>Hours, minutes, seconds, and milliseconds display</li>
+                    <li>Custom styling with CSS-like QSS</li>
+                </ul>
+            </div>
+
+            <div class="interactive-demo">
+                <h2 class="cyber-text">LIVE PREVIEW</h2>
+                <div class="stopwatch-demo">
+                    <div class="time-display">00:00:00.00</div>
+                    <div class="controls">
+                        <button class="cyber-button start-btn">START</button>
+                        <button class="cyber-button stop-btn">STOP</button>
+                        <button class="cyber-button reset-btn">RESET</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-showcase">
+                <h2 class="cyber-text">SOURCE CODE</h2>
+                <div class="terminal-window">
+                    <div class="terminal-header">
+                        <div class="terminal-buttons">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <div class="terminal-title">stopwatch.py</div>
+                    </div>
+                    <div class="terminal-body">
+                        <pre><code class="language-python">
+import sys
+from PyQt5.QtWidgets import (QApplication, QWidget, QLabel,
+                            QPushButton, QVBoxLayout, QHBoxLayout)
+from PyQt5.QtCore import QTimer, QTime, Qt
+
+class Stopwatch(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.time = QTime(0, 0, 0, 0)
+        self.time_label = QLabel("00:00:00.00", self)
+        self.start_button = QPushButton("Start", self)
+        self.stop_button = QPushButton("Stop", self)
+        self.reset_button = QPushButton("Reset", self)
+        self.timer = QTimer(self)
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowTitle("Stopwatch")
+        vbox = QVBoxLayout()
+        vbox.addWidget(self.time_label)
+        self.setLayout(vbox)
+        self.time_label.setAlignment(Qt.AlignCenter)
+        
+        hbox = QHBoxLayout()
+        hbox.addWidget(self.start_button)
+        hbox.addWidget(self.stop_button)
+        hbox.addWidget(self.reset_button)
+        vbox.addLayout(hbox)
+
+        self.setStyleSheet("""
+            QPushButton, QLabel{
+                padding: 20px;
+                font-weight: bold;
+                font-family: calibri;
+            }
+            QPushButton{
+                font-size: 50px;
+            }
+            QLabel{
+                font-size: 120px;
+                background-color: hsl(200, 100%, 85%);
+                border-radius: 20px;
+            }
+        """)
+
+        self.start_button.clicked.connect(self.start)
+        self.stop_button.clicked.connect(self.stop)
+        self.reset_button.clicked.connect(self.reset)
+        self.timer.timeout.connect(self.update_display)
+
+    def start(self):
+        self.timer.start(10)
+
+    def stop(self):
+        self.timer.stop()
+
+    def reset(self):
+        self.timer.stop()
+        self.time = QTime(0, 0, 0, 0)
+        self.time_label.setText(self.format_time(self.time))
+
+    def format_time(self, time):
+        hours = time.hour()
+        minutes = time.minute()
+        seconds = time.second()
+        milliseconds = time.msec() // 10
+        return f"{hours:02}:{minutes:02}:{seconds:02}.{milliseconds:02}"
+
+    def update_display(self):
+        self.time = self.time.addMSecs(10)
+        self.time_label.setText(self.format_time(self.time))
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    stopwatch = Stopwatch()
+    stopwatch.show()
+    sys.exit(app.exec_())
+                        </code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="setup-guide">
+                <h2 class="cyber-text">SETUP GUIDE</h2>
+                <div class="terminal-window">
+                    <div class="terminal-header">
+                        <div class="terminal-buttons">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <div class="terminal-title">INSTALLATION.md</div>
+                    </div>
+                    <div class="terminal-body">
+                        <pre><code class="language-markdown">
+1. Install Python 3.8 or higher
+2. Install PyQt5:
+   pip install PyQt5
+
+3. Run the stopwatch:
+   python stopwatch.py
+                        </code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+    <script>
+        let timer;
+        let running = false;
+        let startTime;
+        let elapsedTime = 0;
+
+        const display = document.querySelector('.time-display');
+        const startBtn = document.querySelector('.start-btn');
+        const stopBtn = document.querySelector('.stop-btn');
+        const resetBtn = document.querySelector('.reset-btn');
+
+        function formatTime(ms) {
+            const hours = Math.floor(ms / 3600000);
+            const minutes = Math.floor((ms % 3600000) / 60000);
+            const seconds = Math.floor((ms % 60000) / 1000);
+            const milliseconds = Math.floor((ms % 1000) / 10);
+            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(2, '0')}`;
+        }
+
+        function updateDisplay() {
+            const currentTime = Date.now();
+            elapsedTime = currentTime - startTime;
+            display.textContent = formatTime(elapsedTime);
+        }
+
+        startBtn.addEventListener('click', () => {
+            if (!running) {
+                running = true;
+                startTime = Date.now() - elapsedTime;
+                timer = setInterval(updateDisplay, 10);
+                startBtn.classList.add('active');
+                stopBtn.classList.remove('active');
+            }
+        });
+
+        stopBtn.addEventListener('click', () => {
+            if (running) {
+                running = false;
+                clearInterval(timer);
+                startBtn.classList.remove('active');
+                stopBtn.classList.add('active');
+            }
+        });
+
+        resetBtn.addEventListener('click', () => {
+            running = false;
+            clearInterval(timer);
+            elapsedTime = 0;
+            display.textContent = '00:00:00.00';
+            startBtn.classList.remove('active');
+            stopBtn.classList.remove('active');
+        });
+    </script>
+</body>
+</html>
